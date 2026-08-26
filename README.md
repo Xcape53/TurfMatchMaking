@@ -21,7 +21,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ## Civilian Client comparison
 
-| Area | Turf Matchmaking 1.6 | Civilian Client 1.2 |
+| Area | Turf Matchmaking 1.6.1 | Civilian Client 1.2 |
 |---|---|---|
 | Package | Userscript | Desktop client |
 | Filters | Region, map, mode, players, time, ping, presets | Region, map, mode, players, time |
@@ -37,7 +37,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.1.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -45,7 +45,7 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.1.js) and confirm installation in your userscript manager.
 
 ## Usage
 
@@ -71,7 +71,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6`
+Current release: `1.6.1`
 
 Author: `xcape53`
 
