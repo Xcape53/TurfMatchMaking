@@ -13,7 +13,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Optional Force Player Count validation through the Alt Player List during the first 10 seconds after joining
 - Optional automatic filtered search after a completed match
 - Optional Double XP end-screen action before the next search
-- Configurable search and cancel hotkeys
+- Configurable search and cancel hotkeys, including F2
 - Configurable connection notification color and position
 - Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
 - Optional local CSS and JavaScript extensions
@@ -49,8 +49,9 @@ Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/
 
 ## Usage
 
-- Press `F2` to open or close the Turf Matchmaker settings.
+- Press `F2` to open or close Turf Matchmaker settings while F2 is unassigned. The on-screen `M` button always remains available.
 - Configure the search hotkey in the Match tab.
+- When F2 is assigned as Search or active Cancel, it performs that action instead of opening the settings panel.
 - Select filters and use the configured search hotkey or the Find Game button.
 - Cancel an active search with the configured cancel hotkey or the on-screen Cancel button.
 
