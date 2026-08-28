@@ -15,7 +15,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Optional Double XP end-screen action before the next search
 - Configurable search and cancel hotkeys, including F2
 - Optional two-press Search Hotkey guard with a 1.5-second window
-- Optional compact Scanning Lobbies and Hunting notification
+- Optional compact Scanning Lobbies and Hunting notification with Cancel
 - Configurable connection notification color and position
 - Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
 - Optional local CSS and JavaScript extensions
