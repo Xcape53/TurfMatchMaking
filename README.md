@@ -10,10 +10,12 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Fresh `game-info` validation immediately before joining
 - Automatic fallback to the next validated candidate when a lobby becomes full
 - Optional recent-lobby avoidance with a configurable cache size
-- Optional Force Player Count validation through the Alt Player List during the first 10 seconds after joining
+- Optional Force Player Count validation through the Alt Player List during the first 5 seconds after joining
 - Optional automatic filtered search after a completed match
 - Optional Double XP end-screen action before the next search
 - Configurable search and cancel hotkeys, including F2
+- Optional two-press Search Hotkey guard with a 1.5-second window
+- Optional compact Scanning Lobbies and Hunting notification
 - Configurable connection notification color and position
 - Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
 - Optional local CSS and JavaScript extensions
@@ -21,7 +23,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ## Civilian Client comparison
 
-| Area | Turf Matchmaking 1.6.2 | Civilian Client 1.2 |
+| Area | Turf Matchmaking 1.6.3 | Civilian Client 1.2 |
 |---|---|---|
 | Package | Userscript | Desktop client |
 | Filters | Region, map, mode, players, time, ping, presets | Region, map, mode, players, time |
@@ -37,7 +39,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.2.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.3.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -45,17 +47,18 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.2.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.3.js) and confirm installation in your userscript manager.
 
 ## Usage
 
 - Press `F2` to open or close Turf Matchmaker settings while F2 is unassigned. The on-screen `M` button always remains available.
 - Configure the search hotkey in the Match tab.
+- Enable Double-Press Search Hotkey if the client can emit accidental search input; two presses within 1.5 seconds will then be required.
 - When F2 is assigned as Search or active Cancel, it performs that action instead of opening the settings panel.
 - Select filters and use the configured search hotkey or the Find Game button.
 - Cancel an active search with the configured cancel hotkey or the on-screen Cancel button.
 
-The matchmaker player count includes active players, spectators, and other connected sessions. It can differ from the visible in-game Player List. Force Player Count can reject an out-of-range lobby when the Alt Player List is opened within 10 seconds of joining.
+The matchmaker player count includes active players, spectators, and other connected sessions. It can differ from the visible in-game Player List. Force Player Count can reject an out-of-range lobby when the Alt Player List is opened within 5 seconds of joining.
 
 Fresh installations default to the Turf Wars maps and game modes across all regions, automatic lowest-ping joining, a disabled server browser on cancel, and a green connection toast. Existing saved settings remain unchanged.
 
@@ -71,7 +74,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.2`
+Current release: `1.6.3`
 
 Author: `xcape53`
 
