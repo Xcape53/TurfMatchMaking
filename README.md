@@ -13,9 +13,11 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Optional Force Player Count validation through the Alt Player List during the first 5 seconds after joining
 - Optional automatic filtered search after a completed match
 - Optional Double XP end-screen action before the next search
+- Optional Target Map Hunting across selected Turf Wars maps
 - Configurable search and cancel hotkeys, including F2
 - Optional two-press Search Hotkey guard with a 1.5-second window
 - Optional compact Scanning Lobbies and Hunting notification with Cancel
+- Categorized Match filters with lobby, hunting, automation, and interface groups
 - Configurable connection notification color and position
 - Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
 - Optional local CSS and JavaScript extensions
@@ -23,7 +25,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ## Civilian Client comparison
 
-| Area | Turf Matchmaking 1.6.3 | Civilian Client 1.2 |
+| Area | Turf Matchmaking 1.6.4 | Civilian Client 1.2 |
 |---|---|---|
 | Package | Userscript | Desktop client |
 | Filters | Region, map, mode, players, time, ping, presets | Region, map, mode, players, time |
@@ -39,7 +41,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.3.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.4.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -47,7 +49,7 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.3.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.4.js) and confirm installation in your userscript manager.
 
 ## Usage
 
@@ -74,7 +76,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.3`
+Current release: `1.6.4`
 
 Author: `xcape53`
 
