@@ -9,10 +9,13 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Fast server hunting between global lobby snapshots
 - Fresh `game-info` validation immediately before joining
 - Automatic fallback to the next validated candidate when a lobby becomes full
+- Persistent full-lobby recovery: after five rejections, briefly join through normal matchmaking, then resume your filters
+- Optional similar-lobby randomization, ordered map preferences, and ping/player selection priority
 - Optional recent-lobby avoidance with a configurable cache size
 - Optional Force Player Count validation through the Alt Player List during the first 5 seconds after joining
 - Optional automatic filtered search after a completed match
 - Optional Double XP end-screen action before the next search
+- Optional Auto Claim Rewards, independently or before the next search
 - Optional Target Map Hunting across selected Turf Wars maps
 - Configurable search and cancel hotkeys, including F2
 - Optional two-press Search Hotkey guard with a 1.5-second window
@@ -25,7 +28,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ## Civilian Client comparison
 
-| Area | Turf Matchmaking 1.6.4 | Civilian Client 1.2 |
+| Area | Turf Matchmaking 1.6.5 | Civilian Client 1.2 |
 |---|---|---|
 | Package | Userscript | Desktop client |
 | Filters | Region, map, mode, players, time, ping, presets | Region, map, mode, players, time |
@@ -41,7 +44,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.4.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.5.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -49,7 +52,7 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.4.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.5.js) and confirm installation in your userscript manager.
 
 ## Usage
 
@@ -66,6 +69,15 @@ Fresh installations default to the Turf Wars maps and game modes across all regi
 
 ## Updates
 
+### Changes in 1.6.5
+
+- Fixed repeated full-lobby recovery, timeout retries, and late navigation after Cancel. After five full rejections, ordinary matchmaking provides a temporary stop before filtered searching resumes.
+- Added preferred map ordering, ping/player priority, and optional random selection among similarly good eligible lobbies.
+- Simplified regional HTTP ping to one warm-up and one measurement, retaining caching and overlapping preparation with discovery.
+- Added Auto Claim Rewards below Double XP, with a short wait before the next search.
+
+Regional ping is an estimate, not the exact latency of each lobby. Backend player counts still include spectators and other connected sessions. The temporary lobby after five full rejections may intentionally fall outside your filters.
+
 The script checks the repository `VERSION` file at most once per hour per browser session. When a newer version is available, it asks whether to download the userscript asset from the matching GitHub release. The userscript metadata also points to this repository for clients that support native userscript updates.
 
 Public release artifacts are minified and moderately obfuscated without source maps. This raises the cost of copying and reverse engineering but does not make browser-side JavaScript impossible to extract.
@@ -76,7 +88,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.4`
+Current release: `1.6.5`
 
 Author: `xcape53`
 
