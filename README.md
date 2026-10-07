@@ -9,7 +9,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Fast server hunting between global lobby snapshots
 - Fresh `game-info` validation immediately before joining
 - Automatic fallback to the next validated candidate when a lobby becomes full
-- Persistent full-lobby recovery: after five rejections, briefly join through normal matchmaking, then resume your filters
+- Persistent join recovery: try cached candidates, enter a temporary lobby when they run out, then resume your full filters in the background
 - Optional similar-lobby randomization, ordered map preferences, and ping/player selection priority
 - Optional recent-lobby avoidance with a configurable cache size
 - Optional Force Player Count validation through the Alt Player List during the first 5 seconds after joining
@@ -44,7 +44,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.5.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.6.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -52,14 +52,14 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.5.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.6.js) and confirm installation in your userscript manager.
 
 ## Usage
 
-- Press `F2` to open or close Turf Matchmaker settings while F2 is unassigned. The on-screen `M` button always remains available.
+- Click the on-screen `M` button to open Turf Matchmaker settings. The old unassigned-F2 panel shortcut is disabled to prevent unwanted activation.
 - Configure the search hotkey in the Match tab.
 - Enable Double-Press Search Hotkey if the client can emit accidental search input; two presses within 1.5 seconds will then be required.
-- When F2 is assigned as Search or active Cancel, it performs that action instead of opening the settings panel.
+- F2 remains available as a configurable Search or Cancel hotkey.
 - Select filters and use the configured search hotkey or the Find Game button.
 - Cancel an active search with the configured cancel hotkey or the on-screen Cancel button.
 
@@ -68,6 +68,15 @@ The matchmaker player count includes active players, spectators, and other conne
 Fresh installations default to the Turf Wars maps and game modes across all regions, automatic lowest-ping joining, a disabled server browser on cancel, and a green connection toast. Existing saved settings remain unchanged.
 
 ## Updates
+
+### Changes in 1.6.6
+
+- Fixed lobby recovery issues observed after the Krunker update, including lost join markers during navigation and additional full, missing, or bad-server messages.
+- Exhausted cached candidates now lead to a temporary lobby through Krunker's matchmaking, followed by automatic background searching and joining with your original filters. No fixed rejection count is required.
+- Retained local input and reliability fixes, including disabling the old F2 panel shortcut. Saved preferences remain unchanged.
+- Published a minified, obfuscated build without source maps. Verified with offline recovery tests and a protected-build browser smoke test; real-server behavior can still vary.
+
+The temporary lobby is selected by Krunker and may fall outside your filters. Your filters apply to the background search for its replacement. The update was when the issue was observed, not a confirmed upstream root cause.
 
 ### Changes in 1.6.5
 
@@ -88,7 +97,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.5`
+Current release: `1.6.6`
 
 Author: `xcape53`
 
