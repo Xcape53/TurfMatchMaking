@@ -44,7 +44,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.6.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.6.7.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
@@ -52,7 +52,7 @@ Tested on Crankshaft.
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.6.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.7.js) and confirm installation in your userscript manager.
 
 ## Usage
 
@@ -68,6 +68,12 @@ The matchmaker player count includes active players, spectators, and other conne
 Fresh installations default to the Turf Wars maps and game modes across all regions, automatic lowest-ping joining, a disabled server browser on cancel, and a green connection toast. Existing saved settings remain unchanged.
 
 ## Updates
+
+### Changes in 1.6.7
+
+**FIXED ANNOYING UPDATE POPUP**
+
+The update notice now closes automatically after five seconds without downloading anything. Download Update and Not Now still work and clear the dismissal timer. Includes all 1.6.6 matchmaking recovery fixes.
 
 ### Changes in 1.6.6
 
@@ -97,7 +103,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.6`
+Current release: `1.6.7`
 
 Author: `xcape53`
 
