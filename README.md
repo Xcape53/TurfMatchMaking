@@ -12,7 +12,9 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Persistent join recovery: try cached candidates, enter a temporary lobby when they run out, then resume your full filters in the background
 - Optional similar-lobby randomization, ordered map preferences, and ping/player selection priority
 - Optional recent-lobby avoidance with a configurable cache size
-- Optional Force Player Count validation through the Alt Player List during the first 5 seconds after joining
+- Optional client-side Force Player Count (total minus yourself) and continuous Low Player Count monitoring (other players in FFA, enemies in TDM)
+- Low-player round protection by kills, KDR, time left and score gap to TOP 1, with per-condition comparisons and grace periods
+- Exact-IGN blacklist/whitelist with toggle shortcuts in the Alt Player List and saved clan/badge display
 - Optional automatic filtered search after a completed match
 - Optional Double XP end-screen action before the next search
 - Optional Auto Claim Rewards, independently or before the next search
@@ -21,7 +23,7 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 - Optional two-press Search Hotkey guard with a 1.5-second window
 - Optional compact Scanning Lobbies and Hunting notification with Cancel
 - Categorized Match filters with lobby, hunting, automation, and interface groups
-- Configurable connection notification color and position
+- Independently configurable connection, searching and rejection notifications with X/Y position, colors and 0-5 second durations
 - Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
 - Optional local CSS and JavaScript extensions
 - Built-in GitHub update check with a download confirmation prompt
@@ -44,15 +46,15 @@ Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatibl
 
 ### Compatible clients
 
-1. Download `TurfMatchMaking1.6.7.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
+1. Download `TurfMatchMaking1.7.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
 2. Import or install it using the script system provided by your compatible client.
 3. Enable the script and reload Krunker.
 
-Tested on Crankshaft.
+Disable the previous active copy before enabling 1.7. Earlier releases were tested on Crankshaft; current development targets Kute. See the current validation scope and limitations in the [1.7 changelog](CHANGELOG.md).
 
 ### Userscript manager
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.6.7.js) and confirm installation in your userscript manager.
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.7.js) and confirm installation in your userscript manager.
 
 ## Usage
 
@@ -63,11 +65,20 @@ Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/
 - Select filters and use the configured search hotkey or the Find Game button.
 - Cancel an active search with the configured cancel hotkey or the on-screen Cancel button.
 
-The matchmaker player count includes active players, spectators, and other connected sessions. It can differ from the visible in-game Player List. Force Player Count can reject an out-of-range lobby when the Alt Player List is opened within 5 seconds of joining.
+The matchmaker feed reports connected occupancy, which can include spectators. Force Player Count checks total population minus yourself once within five seconds of a matchmaker join becoming ready. Low Player Count excludes you in FFA and counts enemies in TDM when a valid team roster is available. Populated hidden Tab rows can be read without reopening it, but opening Tab once may still be necessary. Missing data is not treated as an empty lobby.
+
+Under Low Player Count, use `Stay if:` to edit Kills, KDR, Time Left or Position (points behind TOP 1). Each rule retains its own comparison, value and 0-60 second grace period. Zero disables that rule. Any satisfied rule protects against Low Player Count departure. Manual search remains available, including during whitelist protection.
 
 Fresh installations default to the Turf Wars maps and game modes across all regions, automatic lowest-ping joining, a disabled server browser on cancel, and a green connection toast. Existing saved settings remain unchanged.
 
 ## Updates
+
+### Changes in 1.7
+
+- Added client-side population monitoring, player blacklist/whitelist and Alt B/W toggles with persistent display metadata.
+- Added inline round protection with mathematical comparisons and independent grace periods, including configurable KDR grace.
+- Expanded Lost Connection recovery and fixed stale/duplicate recovery notices; added independent notification customization and durations.
+- Published the minified, obfuscated 1.7 build. Read the [full changelog, installation notes and current limitations](CHANGELOG.md).
 
 ### Changes in 1.6.7
 
@@ -103,7 +114,7 @@ The script communicates with Krunker's public matchmaker endpoints for lobby lis
 
 ## Version
 
-Current release: `1.6.7`
+Current release: `1.7`
 
 Author: `xcape53`
 
