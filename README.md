@@ -2,6 +2,17 @@
 
 A configurable Krunker lobby finder that runs as a userscript. Pick your rules once, press one key, and it joins the best lobby that matches them.
 
+## Live demo
+
+[Try the interactive GUI](https://piotrjeleniewicz.com/turf-demo/) in your browser. Explore filters, themes and notification previews without installing the script. Matchmaking is simulated; your game settings are not accessed.
+
+<details>
+<summary>Preview the interface</summary>
+
+[![Turf Matchmaker GUI demo](docs/gui-demo-preview.png)](https://piotrjeleniewicz.com/turf-demo/)
+
+</details>
+
 ## Why Turf Matchmaking
 
 - **Joins lobbies that are actually good.** Every candidate is rechecked with live game information right before joining, so you do not land in full, finished or empty matches.
