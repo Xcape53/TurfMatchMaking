@@ -1,120 +1,111 @@
 # Turf Matchmaking
 
-Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatible clients. It filters the public matchmaker feed, validates promising lobbies with live game information, and joins the best available server that matches the selected rules.
+Turf Matchmaking is a configurable Krunker lobby finder for userscript-compatible clients. It filters the public matchmaker feed, validates promising lobbies with live game information, and joins the best available server that matches your rules. In Kute it can also keep itself up to date.
 
 ## Features
 
-- Region, map, game mode, player count, remaining time, and ping filters
-- Reusable combined region, map, and game mode presets
-- Fast server hunting between global lobby snapshots
-- Fresh `game-info` validation immediately before joining
-- Automatic fallback to the next validated candidate when a lobby becomes full
-- Persistent join recovery: try cached candidates, enter a temporary lobby when they run out, then resume your full filters in the background
-- Optional similar-lobby randomization, ordered map preferences, and ping/player selection priority
-- Optional recent-lobby avoidance with a configurable cache size
-- Optional client-side Force Player Count (total minus yourself) and continuous Low Player Count monitoring (other players in FFA, enemies in TDM)
-- Low-player round protection by kills, KDR, time left and score gap to TOP 1, with per-condition comparisons and grace periods
-- Exact-IGN blacklist/whitelist with toggle shortcuts in the Alt Player List and saved clan/badge display
-- Optional automatic filtered search after a completed match
-- Optional Double XP end-screen action before the next search
-- Optional Auto Claim Rewards, independently or before the next search
+- Region, map, game mode, player count, remaining time and ping filters, with reusable presets
+- Fast server hunting between lobby snapshots and fresh `game-info` validation right before joining
+- Automatic fallback to the next validated lobby when one becomes full, and join recovery through a temporary lobby while your full filters keep searching
+- Ordered map preferences, players or ping priority, optional randomization among similar lobbies and recent-lobby avoidance
 - Optional Target Map Hunting across selected Turf Wars maps
-- Configurable search and cancel hotkeys, including F2
-- Optional two-press Search Hotkey guard with a 1.5-second window
-- Optional compact Scanning Lobbies and Hunting notification with Cancel
-- Categorized Match filters with lobby, hunting, automation, and interface groups
-- Independently configurable connection, searching and rejection notifications with X/Y position, colors and 0-5 second durations
-- Automatic 60-second cooldown after HTTP 429 or 5xx matchmaker responses
-- Optional local CSS and JavaScript extensions
-- Built-in GitHub update check with a download confirmation prompt
-
-## Civilian Client comparison
-
-| Area | Turf Matchmaking 1.6.5 | Civilian Client 1.2 |
-|---|---|---|
-| Package | Userscript | Desktop client |
-| Filters | Region, map, mode, players, time, ping, presets | Region, map, mode, players, time |
-| Discovery | Full snapshot every 8.5 s; live candidates rechecked every 1.25 s | One snapshot |
-| Fresh data | Parallel + final `game-info` | `game-list` recheck only |
-| Selection | Ping, priority, midpoint, freshness | Players/ping, randomized tier |
-| No match | Keeps hunting | Stops / server browser |
-| Full lobby | Saved queue + live revalidation | Fresh list + next non-full |
-| Count guard | Optional Alt Player List | Backend count only |
-| Backend errors | 60 s `429/5xx` cooldown | Stops search |
+- Force Player Count and Low Player Count monitoring, with round protection by kills, KDR, time left and score gap to TOP 1
+- Exact-IGN blacklist and whitelist, with toggle shortcuts in the Alt Player List
+- Optional automatic search after a match, Double XP and Auto Claim Rewards
+- Configurable search and cancel hotkeys, an optional two-press search guard and a compact search status with Cancel
+- Connection, searching and rejection notifications with their own position, colors and duration
+- Automatic 60-second pause after HTTP 429 or 5xx matchmaker responses
+- Automatic updates in Kute, a first-run guide for new users and optional local CSS and JavaScript extensions
 
 ## Installation
 
-### Compatible clients
+Download the files from the [latest release](https://github.com/Xcape53/TurfMatchMaking/releases/latest). Pick the case that matches you:
 
-1. Download `TurfMatchMaking1.7.js` from the [latest GitHub release](https://github.com/Xcape53/TurfMatchMaking/releases/latest).
-2. Import or install it using the script system provided by your compatible client.
-3. Enable the script and reload Krunker.
+### New to Turf Matchmaking
 
-Disable the previous active copy before enabling 1.7. Earlier releases were tested on Crankshaft; current development targets Kute. See the current validation scope and limitations in the [1.7 changelog](CHANGELOG.md).
+**Kute (recommended)**
+1. Download `TurfMatchMaking.js`.
+2. Put it in your Kute scripts folder (`Documents\kute\scripts`) or drop it into Kute's script manager.
+3. Reload the game.
+4. A short guide shows where the **M** menu is. Open it to choose your filters, then press **F3** or Find Game to search.
 
-### Userscript manager
+Future versions install themselves. See [Automatic updates](#automatic-updates).
 
-Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking1.7.js) and confirm installation in your userscript manager.
+**Other clients (Crankshaft, Glorp, KCC)**
+Download `TurfMatchMaking<version>.js` and add it with your client's script system, then reload.
+
+**Userscript manager (Tampermonkey, Violentmonkey)**
+Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking.js) and confirm the installation.
+
+### Updating from an older version in Kute
+
+1. Download `TurfMatchMaking.js` and put it in `Documents\kute\scripts`.
+2. In Kute's script manager, **disable your old Turf script** (for example `TurfMatchMaking1.7.js`). You do not need to delete it.
+3. Reload the game.
+
+Your settings, presets and player lists are kept. This is the last manual update: from now on, new versions install automatically.
+
+### Updating from an older version in another client (Crankshaft, Glorp, KCC)
+
+1. Download `TurfMatchMaking<version>.js` and install it the same way you installed the previous version.
+2. Disable or remove the old Turf script so only one copy runs.
+3. Reload the game.
+
+Your settings are kept. New versions still appear as an in-game notice with a download button. Automatic updates for other clients are planned.
+
+> Settings are stored separately in each client. If you move from another client to Kute, Turf starts there with default settings.
+
+### First run of 1.7.1
+
+The first time 1.7.1 runs, it sets a few options once: Server Hunting on, Target Map Hunting off, Double XP, Auto Claim Rewards, Auto Search After Match and Compact Search Status on, blacklist and whitelist on, and new notification positions. Your player lists, colors and other settings are kept, and you can change these options afterwards in **M > Settings**.
+
+## Automatic updates
+
+- **Settings > Script Updates > Automatic Updates** is on by default. If you turn it off, the choice is kept and you can still install deliberately from the update window or with **Check for Updates**.
+- Turf checks for a new version when the game starts and once per hour.
+- When an update installs, a window tells you it is installing and that automatic updates can be turned off in Settings. The new version starts on your **next reload**. A running match is never interrupted.
+- Settings, presets, blacklist and whitelist are kept. Other scripts are not touched. Older Turf files are disabled, not deleted.
+- Downloads come only from this repository's release tag and must match their SHA256 checksum and script identity before they are saved. If anything is wrong, or GitHub cannot be reached, nothing changes and the reason is shown under Script Updates.
+- Automatic installation currently needs Kute's script manager; support for other clients is planned. Keep the file name `TurfMatchMaking.js`, and do not edit that file by hand because updates replace it.
+- The checksum protects against damaged downloads, not against a compromised repository. Turn Automatic Updates off if you prefer to review every version yourself.
+
+To go back to an older version, disable `TurfMatchMaking.js` in Kute's script manager, enable your older Turf file and reload.
 
 ## Usage
 
-- Click the on-screen `M` button to open Turf Matchmaker settings. The old unassigned-F2 panel shortcut is disabled to prevent unwanted activation.
-- Configure the search hotkey in the Match tab.
-- Enable Double-Press Search Hotkey if the client can emit accidental search input; two presses within 1.5 seconds will then be required.
-- F2 remains available as a configurable Search or Cancel hotkey.
-- Select filters and use the configured search hotkey or the Find Game button.
-- Cancel an active search with the configured cancel hotkey or the on-screen Cancel button.
+- Click the on-screen `M` button to open the settings.
+- Choose your filters in the Match tab and press the search hotkey (F3 by default) or Find Game.
+- Cancel an active search with the cancel hotkey or the on-screen Cancel button.
+- Enable Double-Press Search Hotkey if your client can produce accidental key presses; two presses within 1.5 seconds are then required.
+- Under Low Player Count, `Stay if:` keeps you in a round by kills, KDR, time left or points behind TOP 1, each with its own comparison, value and 0-60 second grace period. Zero disables a rule.
 
-The matchmaker feed reports connected occupancy, which can include spectators. Force Player Count checks total population minus yourself once within five seconds of a matchmaker join becoming ready. Low Player Count excludes you in FFA and counts enemies in TDM when a valid team roster is available. Populated hidden Tab rows can be read without reopening it, but opening Tab once may still be necessary. Missing data is not treated as an empty lobby.
+New installations start with 2-7 players, 90 seconds left, 120 ms maximum ping, Most Players priority, F3 to search, a blue/purple theme and two-second notifications. Existing saved settings are kept, apart from the [one-time setup](#first-run-of-171) on the first 1.7.1 run.
 
-Under Low Player Count, use `Stay if:` to edit Kills, KDR, Time Left or Position (points behind TOP 1). Each rule retains its own comparison, value and 0-60 second grace period. Zero disables that rule. Any satisfied rule protects against Low Player Count departure. Manual search remains available, including during whitelist protection.
+## Good to know
 
-Fresh installations default to the Turf Wars maps and game modes across all regions, automatic lowest-ping joining, a disabled server browser on cancel, and a green connection toast. Existing saved settings remain unchanged.
+- The matchmaker reports connected players, which can include spectators. Force Player Count and Low Player Count read the in-game player list to compensate, and missing data is never treated as an empty lobby.
+- Displayed ping is a regional estimate, not the exact latency of each lobby.
+- A temporary recovery lobby is chosen by Krunker and may fall outside your filters; your filters still apply to the search for its replacement.
 
-## Updates
+## What's new in 1.7.1
 
-### Changes in 1.7
+- Readable source under the MIT license, without obfuscation.
+- Automatic updates in Kute with a visible install notice.
+- Updated defaults for new users and a one-time setup on the first run.
+- Consistent notification settings with two-second default durations.
+- A first-run guide that shows new users where the menu is.
 
-- Added client-side population monitoring, player blacklist/whitelist and Alt B/W toggles with persistent display metadata.
-- Added inline round protection with mathematical comparisons and independent grace periods, including configurable KDR grace.
-- Expanded Lost Connection recovery and fixed stale/duplicate recovery notices; added independent notification customization and durations.
-- Published the minified, obfuscated 1.7 build. Read the [full changelog, installation notes and current limitations](CHANGELOG.md).
-
-### Changes in 1.6.7
-
-**FIXED ANNOYING UPDATE POPUP**
-
-The update notice now closes automatically after five seconds without downloading anything. Download Update and Not Now still work and clear the dismissal timer. Includes all 1.6.6 matchmaking recovery fixes.
-
-### Changes in 1.6.6
-
-- Fixed lobby recovery issues observed after the Krunker update, including lost join markers during navigation and additional full, missing, or bad-server messages.
-- Exhausted cached candidates now lead to a temporary lobby through Krunker's matchmaking, followed by automatic background searching and joining with your original filters. No fixed rejection count is required.
-- Retained local input and reliability fixes, including disabling the old F2 panel shortcut. Saved preferences remain unchanged.
-- Published a minified, obfuscated build without source maps. Verified with offline recovery tests and a protected-build browser smoke test; real-server behavior can still vary.
-
-The temporary lobby is selected by Krunker and may fall outside your filters. Your filters apply to the background search for its replacement. The update was when the issue was observed, not a confirmed upstream root cause.
-
-### Changes in 1.6.5
-
-- Fixed repeated full-lobby recovery, timeout retries, and late navigation after Cancel. After five full rejections, ordinary matchmaking provides a temporary stop before filtered searching resumes.
-- Added preferred map ordering, ping/player priority, and optional random selection among similarly good eligible lobbies.
-- Simplified regional HTTP ping to one warm-up and one measurement, retaining caching and overlapping preparation with discovery.
-- Added Auto Claim Rewards below Double XP, with a short wait before the next search.
-
-Regional ping is an estimate, not the exact latency of each lobby. Backend player counts still include spectators and other connected sessions. The temporary lobby after five full rejections may intentionally fall outside your filters.
-
-The script checks the repository `VERSION` file at most once per hour per browser session. When a newer version is available, it asks whether to download the userscript asset from the matching GitHub release. The userscript metadata also points to this repository for clients that support native userscript updates.
-
-Public release artifacts are minified and moderately obfuscated without source maps. This raises the cost of copying and reverse engineering but does not make browser-side JavaScript impossible to extract.
+See [CHANGELOG.md](CHANGELOG.md) and the release notes for details and earlier versions.
 
 ## Network access
 
-The script communicates with Krunker's public matchmaker endpoints for lobby lists, live game information, and regional latency checks. It also reads the small `VERSION` file from this repository for update checks. Matchmaker requests pause automatically after rate limits or backend failures.
+The script talks to Krunker's public matchmaker endpoints for lobby lists, live game information and regional latency. For updates it reads the `VERSION` file from this repository and, in Kute, downloads the matching release file and its checksum from the release tag on raw.githubusercontent.com. Matchmaker requests pause automatically after rate limits or backend failures.
 
-## Version
+## License
 
-Current release: `1.7`
+MIT. See [LICENSE](LICENSE).
+
+Current release: `1.7.1`
 
 Author: `xcape53`
 
