@@ -9,7 +9,7 @@
   <img src="https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-03a9f4?style=flat" alt="Platforms: macOS, Windows, Linux" />
 </p>
 <p align="center">
-<img src="docs/soyIcon.png" alt="Demo">
+ <img src="docs/soyIcon.png" height="50%" width="50%" alt="Demo">
 </p>
 <p align="center">A <b>HIGHLY</b> configurable Krunker game finder userscript.<br><i>Pick your rules once, press one key, and you are set.</i></p>
 
