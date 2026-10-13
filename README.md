@@ -13,10 +13,10 @@
 
 <p align="center">A <b>HIGHLY</b> configurable Krunker game finder userscript.<br><i>Pick your rules once, press one key, and you are set.</i></p>
 
-<hr>
+
 <a href="https://piotrjeleniewicz.com/turf-demo/" target="_blank"><h2 align="center"><b>Click for demo</b></h2></a>
 <a href="https://piotrjeleniewicz.com/turf-demo/" target="_blank"><img src="docs/Turf-Matchmaker-GUI-th.png" alt="Demo"></a>
-<hr>
+
 
 ## Installation
 
