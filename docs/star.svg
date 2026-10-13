@@ -1,3 +1,26 @@
-<svg viewBox="0 0 16 16" width="128" height="128" fill="#e3b341" xmlns="http://www.w3.org/2000/svg">
-  <path d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 336 290" width="336" height="290">
+  <defs>
+    <linearGradient id="textGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#e39a41"></stop>
+      <stop offset="100%" stop-color="#d6e341"></stop>
+    </linearGradient>
+  </defs>
+
+  <!-- background -->
+  <rect width="100%" height="100%" fill="#151515"></rect>
+
+  <!-- top text -->
+  <text x="168" y="42" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" letter-spacing="1" fill="url(#textGrad)">
+    star the project
+  </text>
+
+  <!-- star -->
+  <g transform="translate(104,81) scale(8)">
+    <path fill="#e3b341" d="M8 .25a.75.75 0 0 1 .673.418l1.882 3.815 4.21.612a.75.75 0 0 1 .416 1.279l-3.046 2.97.719 4.192a.751.751 0 0 1-1.088.791L8 12.347l-3.766 1.98a.75.75 0 0 1-1.088-.79l.72-4.194L.818 6.374a.75.75 0 0 1 .416-1.28l4.21-.611L7.327.668A.75.75 0 0 1 8 .25Z"></path>
+  </g>
+
+  <!-- bottom text -->
+  <text x="168" y="252" text-anchor="middle" font-family="Arial, Helvetica, sans-serif" font-size="22" font-weight="700" letter-spacing="1" fill="url(#textGrad)">
+    no pressure :)
+  </text>
 </svg>
