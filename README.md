@@ -1,4 +1,6 @@
-<h1 align="center" style="background: linear-gradient(90deg, #0040ff, #7a00ff); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 5px;">TURF MATCHMAKER</h1>
+<p align="center">
+<img src="docs/title.svg" height="256" alt="Turf Matchmaker" />
+</p>
 <p align="center">
   <a href="https://github.com/Xcape53/TurfMatchMaking/releases"><img src="https://img.shields.io/github/downloads/Xcape53/TurfMatchMaking/total?style=flat&color=0ed000" alt="Total downloads" /></a>
   <a href="https://github.com/Xcape53/TurfMatchMaking"><img src="https://img.shields.io/github/stars/Xcape53/TurfMatchMaking?style=flat&color=7a00ff" alt="GitHub stars" /></a>
@@ -83,11 +85,9 @@ Downloads come only from this repository's releases and are checked against thei
 > Bug reports and ideas are welcome in [Issues](https://github.com/Xcape53/TurfMatchMaking/issues) or by DM on Discord.
 >
 
-<p font-size: 40px; align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">star the project</p>
 <p align="center">
-<img src="docs/star.svg" width="128" height="128" alt="Star the project" />
+<img src="docs/star.svg" width="256" height="256" alt="Star the project" />
 </p>
-<p font-size: 40px; align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">no pressure :)</p>
 
 ## License
 MIT. See [LICENSE](LICENSE). Author: `xcape53`.
