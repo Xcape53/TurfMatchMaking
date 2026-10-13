@@ -1,5 +1,5 @@
 <p align="center">
-<img src="docs/title.svg" height="256" alt="Turf Matchmaker" />
+<a href="https://piotrjeleniewicz.com/turf-demo/" target="_blank"><img height="300" src="docs/Turf-Matchmaker-GUI-th.png" alt="Demo"></a>
 </p>
 <p align="center">
   <a href="https://github.com/Xcape53/TurfMatchMaking/releases"><img src="https://img.shields.io/github/downloads/Xcape53/TurfMatchMaking/total?style=flat&color=0ed000" alt="Total downloads" /></a>
@@ -16,9 +16,11 @@
 <p align="center">A <b>HIGHLY</b> configurable Krunker game finder userscript.<br><i>Pick your rules once, press one key, and you are set.</i></p>
 
 
-<a href="https://piotrjeleniewicz.com/turf-demo/" target="_blank"><h2 align="center"><b>Click for demo</b></h2></a>
-<a href="https://piotrjeleniewicz.com/turf-demo/" target="_blank"><img src="docs/Turf-Matchmaker-GUI-th.png" alt="Demo"></a>
 
+<h3 align="center"><a href=https://piotrjeleniewicz.com/turf-demo/"><ins>DEMO</ins></a></h3>
+<p align="center">
+<img height="300" src="docs/Turf-Matchmaker-GUI-div.png" alt="Demo">
+</p>
 
 ## Installation
 
