@@ -8,9 +8,9 @@
   <br>
   <img src="https://img.shields.io/badge/macOS%20%7C%20Windows%20%7C%20Linux-03a9f4?style=flat" alt="Platforms: macOS, Windows, Linux" />
 </p>
-
-![Turf Matchmaker M button](docs/soyIcon.png)
-
+<p align="center">
+<img src="docs/soyIcon.png" alt="Demo">
+</p>
 <p align="center">A <b>HIGHLY</b> configurable Krunker game finder userscript.<br><i>Pick your rules once, press one key, and you are set.</i></p>
 
 
@@ -33,7 +33,7 @@ Download `TurfMatchMaking<version>.js`, add it with your client's script system,
 **Userscript managers (Tampermonkey, Violentmonkey)**
 Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/main/TurfMatchMaking.js) and confirm the installation.
 
-<hr>
+
 
 ## Features
 
@@ -47,7 +47,7 @@ Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/
 | **Customizable**   | Your colors, hotkeys, notifications, CSS and JavaScript                         |
 | **Auto-updates**   | New versions install automatically in Kute after **F5**                         |
 
-<hr>
+
 
 ## How to use
 
@@ -55,7 +55,7 @@ Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/
 2. Choose your filters in the Match tab.
 3. Press the search hotkey (**F3** by default) or Find Game. Press the cancel hotkey or Cancel to stop.
 
-<hr>
+
 
 ## Updates
 
@@ -64,7 +64,7 @@ Open the [raw script](https://raw.githubusercontent.com/Xcape53/TurfMatchMaking/
 
 Downloads come only from this repository's releases and are checked against their SHA256 checksum before installing. See [Releases](https://github.com/Xcape53/TurfMatchMaking/releases) for what changed in each version.
 
-<hr>
+<br>
 
 > [!NOTE]
 > ## Good to know
@@ -76,18 +76,18 @@ Downloads come only from this repository's releases and are checked against thei
 > **Did i use AI?**
 > Yes, anthropic's and openai's finest
 
-<hr>
+<br>
 
 > [!IMPORTANT]
 > ## Feedback
 > Bug reports and ideas are welcome in [Issues](https://github.com/Xcape53/TurfMatchMaking/issues) or by DM on Discord.
 >
 
-<h1 align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">star the project</h1>
-<h1 align="center">
+<p font-size: 40px; align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">star the project</p>
+<p align="center">
 <img src="docs/star.svg" width="128" height="128" alt="Star the project" />
-</h1>
-<h1 align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">no pressure :)</h1>
+</p>
+<p font-size: 40px; align="center" style="background: linear-gradient(270deg,#e39a41, #d6e341); background-clip: text; -webkit-background-clip: text; -webkit-text-fill-color: transparent; letter-spacing: 1px;">no pressure :)</p>
 
 ## License
 MIT. See [LICENSE](LICENSE). Author: `xcape53`.
