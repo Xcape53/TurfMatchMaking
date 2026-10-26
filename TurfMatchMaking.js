@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         Turf Matchmaking
-// @version      1.7.1
+// @version      1.7.3
 // @description  Fast matchmaking optimized (Krunker Civilian model)
 // @author       xcape53
 // @license      MIT
@@ -39,7 +39,7 @@ SOFTWARE.
 
 (function () {
     // Prevent multiple userscript instances from handling the same input and requests.
-    const SCRIPT_VERSION = "1.7.1";
+    const SCRIPT_VERSION = "1.7.3";
     const INSTANCE_KEY = "__turfMatchmakingInstance";
     if (window[INSTANCE_KEY]) {
         console.warn("Turf Matchmaking skipped a duplicate injection.");
@@ -92,6 +92,10 @@ SOFTWARE.
         "Domination", "Squad Deathmatch", "Kranked FFA", "Team Defender", "Deposit FFA",
         "Chaos Snipers", "Bighead FFA"
     ];
+    // Mode numbers past the list above, named only when the game list confirms them (official custom labels)
+    // or for the current event. Other new numbers are shown as "Mode #N".
+    const EXTRA_GAMEMODES = { 35: "Zombies", 37: "Trick or Treat" };
+    const ALL_GAMEMODES = [...GAMEMODES, ...Object.values(EXTRA_GAMEMODES)];
 
     // Keep lobby rows compact without changing the full names used by filters.
     const GAMEMODE_LABELS = {
@@ -114,7 +118,8 @@ SOFTWARE.
         "Team Defender": "TD",
         "Deposit FFA": "DFFA",
         "Chaos Snipers": "CS",
-        "Bighead FFA": "BFFA"
+        "Bighead FFA": "BFFA",
+        "Trick or Treat": "ToT"
     };
 
     function getGamemodeLabel(gamemode) {
@@ -147,7 +152,8 @@ SOFTWARE.
         "Lostworld", "Citadel", "Oasis", "Kanji", "Industry", "Lumber",
         "Evacuation", "Site", "SkyTemple", "Lagoon", "Tropicano", "Habitat",
         "Atomic", "Old_Burg", "Throwback", "Clockwork", "Bazaar", "Erupt",
-        "HQ", "Lush", "Vivo", "Slide Moonlight", "Eterno Sim"
+        "HQ", "Lush", "Vivo", "Slide Moonlight", "Eterno Sim", "Frontier", "Piazza",
+        "Candy Heist", "Barnyard", "Arena", "Stockade"
     ];
 
     const MAP_NAMES = {
@@ -221,7 +227,7 @@ SOFTWARE.
             if (!name || !rawPreset || typeof rawPreset !== "object" || Array.isArray(rawPreset)) continue;
             presets[name] = {
                 regions: [...new Set(asArray(rawPreset.regions).filter(item => REGIONS.includes(item)))],
-                modes: [...new Set(asArray(rawPreset.modes).filter(item => GAMEMODES.includes(item)))],
+                modes: [...new Set(asArray(rawPreset.modes).filter(item => ALL_GAMEMODES.includes(item)))],
                 maps: [...new Set(asArray(rawPreset.maps).filter(item => MAPS.includes(item)))]
             };
         }
@@ -281,15 +287,15 @@ SOFTWARE.
     const loadedModes = defaultedModes
         .filter(mode => typeof mode === "string" || Number.isInteger(mode))
         .map(mode => {
-            if (Number.isInteger(mode)) return GAMEMODES[mode] || mode;
-            return GAMEMODES.find(item => item.toLowerCase() === mode.toLowerCase()) || mode;
+            if (Number.isInteger(mode)) return GAMEMODES[mode] || EXTRA_GAMEMODES[mode] || mode;
+            return ALL_GAMEMODES.find(item => item.toLowerCase() === mode.toLowerCase()) || mode;
         });
     const savedTargetHuntMaps = Array.isArray(saved.targetHuntMaps)
         ? saved.targetHuntMaps
         : (typeof saved.targetHuntMap === "string" ? [saved.targetHuntMap] : []);
     const loadedTargetHuntMaps = sanitizeTargetHuntMaps(savedTargetHuntMaps);
     const legacyMapPresets = sanitizeFilterPresets(saved.mapPresets, MAPS);
-    const legacyModePresets = sanitizeFilterPresets(saved.modePresets, GAMEMODES);
+    const legacyModePresets = sanitizeFilterPresets(saved.modePresets, ALL_GAMEMODES);
     const savedCombinedPresets = sanitizeCombinedFilterPresets(saved.filterPresets);
     const migratedCombinedPresets = Object.keys(savedCombinedPresets).length
         ? savedCombinedPresets
@@ -1109,12 +1115,14 @@ SOFTWARE.
             : selectedTargetMaps;
         const targetMaps = requestedPurpose === "target" ? requestedTargetMaps : [];
         if (requestedPurpose === "target" && targetMaps.length) {
-            return { purpose: "target", targetMaps, background: options.background !== false, ...(options.manual ? { manual: true } : {}) };
+            return { purpose: "target", targetMaps, background: options.background !== false, ...(options.manual ? { manual: true } : {}),
+                ...(options.recovery ? { recovery: true } : {}) };
         }
         return {
             purpose: requestedPurpose === "fallback" ? "fallback" : "normal",
             targetMaps: [],
             ...(options.manual ? { manual: true } : {}),
+            ...(options.recovery ? { recovery: true } : {}),
             ...(options.lowPlayerGuard ? { lowPlayerGuard: true } : {}),
             background: options.background === true
         };
@@ -1146,8 +1154,12 @@ SOFTWARE.
             const sessionTargetMaps = sanitizeTargetHuntMaps(session?.targetMaps);
             const selectionMatches = targetMaps.length === sessionTargetMaps.length
                 && targetMaps.every((map, index) => map === sessionTargetMaps[index]);
+            // Lobbies rotate maps between rounds; a session that names another map would keep hunting paused.
+            let liveMap = "";
+            try { liveMap = String(window.getGameActivity?.()?.map || ""); } catch (_) { /* unavailable */ }
             if (!targetMaps.length || !currentGameID || session?.gameID !== currentGameID
                 || !selectionMatches || !MAPS.includes(session?.map)
+                || (liveMap && normalizeMapName(liveMap) !== normalizeMapName(session.map))
                 || !Number.isFinite(age) || age < 0 || age > TARGET_HUNT_SESSION_TTL_MS) {
                 sessionStorage.removeItem(TARGET_HUNT_SESSION_KEY);
                 return null;
@@ -1502,7 +1514,7 @@ SOFTWARE.
     }
 
     function saveJoinRecovery(state) {
-        writeSessionJSON(JOIN_RECOVERY_KEY, { ...state, updatedAt: Date.now() });
+        return writeSessionJSON(JOIN_RECOVERY_KEY, { ...state, updatedAt: Date.now() });
     }
 
     // Keep the outgoing document from consuming the destination's join marker.
@@ -1524,6 +1536,19 @@ SOFTWARE.
         sessionStorage.removeItem(JOIN_MARKER_KEY);
         sessionStorage.removeItem(JOIN_QUEUE_KEY);
         sessionStorage.removeItem("lombre_joined_via_mm");
+    }
+
+    // Optional, test-only diagnostics. The separate TurfMatchMakingDiagnostics.js userscript defines
+    // window.__turfDiagnostics; without it these calls do nothing. Only events that Turf alone knows are sent here.
+    function emitDiagnostic(event, details = {}) {
+        const sink = window.__turfDiagnostics;
+        if (typeof sink !== "function") return;
+        try { sink(event, { version: SCRIPT_VERSION, ...details }); } catch (_) { /* Diagnostics never affect matchmaking. */ }
+    }
+
+    function describeMapFilter(options = activeSearchOptions) {
+        return { selectedMaps: [...STATE.maps], purpose: options?.purpose || "manual",
+            targetMaps: Array.isArray(options?.targetMaps) ? [...options.targetMaps] : [] };
     }
 
     function storeCandidateQueue(candidates, pings) {
@@ -1972,13 +1997,15 @@ SOFTWARE.
 
     let playerPolicy = { game: null, checkedAt: 0, held: false, known: false, absentSince: null, blackFired: false, suspended: null, boundary: null, signature: null, root: null };
 
+    // An unknown roster holds automation conservatively, except the search that returns from a temporary lobby
+    // Turf itself chose: only a confirmed whitelisted player holds that one.
     function playerPolicyBlocks(options = {}) {
         return STATE.playerWhitelistEnabled && STATE.playerWhitelist.length > 0
-            && (playerPolicy.held || !playerPolicy.known) && !options.manual;
+            && (playerPolicy.held || (!playerPolicy.known && !options.recovery)) && !options.manual;
     }
 
     function suspendPlayerPolicySearch() {
-        if (overlay.classList.contains("searching") && !activeSearchOptions.manual) {
+        if (overlay.classList.contains("searching") && playerPolicyBlocks(activeSearchOptions)) {
             playerPolicy.suspended = { ...activeSearchOptions };
             replaceActiveSearch();
             showRecoveryToast(playerPolicy.held ? "WHITELIST PLAYER PRESENT" : "WAITING FOR PLAYER LIST");
@@ -2314,7 +2341,7 @@ SOFTWARE.
             details,
             map: typeof details.i === "string" ? details.i : "",
             modeIndex,
-            gamemode: modeIndex === null ? "Unknown mode" : (GAMEMODES[modeIndex] ?? `Mode #${modeIndex}`),
+            gamemode: modeIndex === null ? "Unknown mode" : (GAMEMODES[modeIndex] ?? EXTRA_GAMEMODES[modeIndex] ?? `Mode #${modeIndex}`),
             remainingTime,
             source,
             validationUnavailable: false
@@ -2776,6 +2803,8 @@ SOFTWARE.
             rememberRecentLobby(fresh.gameID);
             storeTargetHuntSession(fresh, activeSearchOptions.purpose);
             setJoinMarker(fresh.gameID);
+            emitDiagnostic("join", { path: "search", gameID: fresh.gameID, map: fresh.map, listMap: unique[index].map,
+                mode: fresh.gamemode, players: fresh.playerCount, timeLeft: fresh.remainingTime, ...describeMapFilter() });
             searchCanceled = true;
             searchRunId += 1;
             stopMatchmakerWork();
@@ -2889,6 +2918,8 @@ SOFTWARE.
             const previous = readJoinRecovery();
             if (previous) saveJoinRecovery({ ...previous, temporary: false, fullCount: 0 });
             clearJoinMarker();
+            // This page now owns a new search, so its own errors must be handled again.
+            temporaryLobbyNavigationAt = 0;
         }
         sessionStorage.removeItem(JOIN_QUEUE_KEY);
         stopMatchmakerWork();
@@ -3028,7 +3059,7 @@ SOFTWARE.
             }
             presets[name] = {
                 regions: [...new Set(STATE.regions.filter(item => REGIONS.includes(item)))],
-                modes: [...new Set(STATE.modes.filter(item => GAMEMODES.includes(item)))],
+                modes: [...new Set(STATE.modes.filter(item => ALL_GAMEMODES.includes(item)))],
                 maps: [...new Set(STATE.maps.filter(item => MAPS.includes(item)))]
             };
             STATE.filterPresets = presets;
@@ -3139,7 +3170,7 @@ SOFTWARE.
             } else if (action === "all") {
                 STATE.regions = [...REGIONS];
                 STATE.maps = [...MAPS];
-                STATE.modes = [...GAMEMODES];
+                STATE.modes = [...ALL_GAMEMODES];
             } else if (action === "save") {
                 openPresetSaveDialog();
                 return;
@@ -3797,7 +3828,7 @@ SOFTWARE.
                         <span style="font-size:11px; font-weight:bold; color:#b1b1b1; letter-spacing: 0.5px;">PRIORITIZE GAME TYPE</span>
                         <select id="priority_mode_sel" style="background:#171717; color:#fff; border:1px solid ${STATE.priorityMode ? 'var(--accent)' : '#2d2d2d'}; border-radius:4px; font-size:10px; font-weight:bold; padding:6px 8px; cursor:pointer; outline:none; font-family:'Aldrich'; text-transform:uppercase; max-width:170px;">
                             <option value="" ${STATE.priorityMode === '' ? 'selected' : ''}>NONE</option>
-                            ${GAMEMODES.map(mode => `<option value="${escapeHtml(mode)}" ${STATE.priorityMode === mode ? 'selected' : ''}>${escapeHtml(mode)}</option>`).join('')}
+                            ${ALL_GAMEMODES.map(mode => `<option value="${escapeHtml(mode)}" ${STATE.priorityMode === mode ? 'selected' : ''}>${escapeHtml(mode)}</option>`).join('')}
                         </select>
                     </div>
                 </div>
@@ -3805,7 +3836,7 @@ SOFTWARE.
 
             html += drawFilterTools();
             drawGrid("REGIONS (NONE = ALL)", REGIONS, "regions", REGION_NAMES, 5);
-            drawGrid("GAME MODES", GAMEMODES, "modes", null, 3);
+            drawGrid("GAME MODES", ALL_GAMEMODES, "modes", null, 3);
             drawGrid("MAPS", MAPS, "maps", MAP_NAMES, 4);
 
             html += `
@@ -4529,6 +4560,15 @@ SOFTWARE.
         } catch { return null; }
     }
 
+    // Set in the page that leaves for a temporary lobby. Navigation through Krunker's matchmaker can take a
+    // second or two, and that page must not consume the recovery state meant for the next page.
+    let temporaryLobbyNavigationAt = 0;
+    const TEMPORARY_LOBBY_HANDOFF_MS = 15000;
+    const TEMPORARY_LOBBY_TAKEN_OVER = -1;
+    function temporaryLobbyHandoffPending() {
+        return temporaryLobbyNavigationAt > 0 && Date.now() - temporaryLobbyNavigationAt < TEMPORARY_LOBBY_HANDOFF_MS;
+    }
+
     // A short cached check precedes native matchmaking, never a second full scan.
     async function joinTemporaryLobby(recovery, nativeButton = null) {
         if (cancelProtectedLowPlayerSearch()) return;
@@ -4548,12 +4588,22 @@ SOFTWARE.
         if (generation !== searchRunId) return;
         if (!getVisibleConnectionError() && playerPolicyBlocks(recovery.options)) return;
         stopMatchmakerWork();
-        saveJoinRecovery({ ...recovery, fullCount: 0, temporary: true });
+        // Without stored recovery the next page could not restore the filters, so search with them here instead.
+        if (!saveJoinRecovery({ ...recovery, fullCount: 0, temporary: true })) {
+            triggerMatchmaker("temporary-lobby-unsaved", { ...recovery.options, background: true });
+            return;
+        }
+        temporaryLobbyNavigationAt = Date.now();
         if (candidate) {
+            // The temporary lobby ignores the map filter by design; the background search restores it.
+            emitDiagnostic("join", { path: "temporary-lobby-candidate", gameID: candidate.gameID, map: candidate.map,
+                mode: candidate.gamemode, players: candidate.playerCount, timeLeft: candidate.remainingTime, ...describeMapFilter(recovery.options) });
             window.location.assign(`https://krunker.io/?game=${candidate.gameID}`);
             return;
         }
         const current = new URLSearchParams(window.location.search).get("game");
+        emitDiagnostic("join", { path: "krunker-matchmaker", gameID: "", map: "", excluded: current || "",
+            ...describeMapFilter(recovery.options) });
         if (nativeButton?.isConnected && isElementActuallyVisible(nativeButton)) {
             try {
                 nativeButton.click();
@@ -4573,13 +4623,25 @@ SOFTWARE.
     function resumeAfterTemporaryLobby(isIngame) {
         const recovery = readJoinRecovery();
         if (!recovery?.temporary) return false;
+        // Only the next page resumes; if the navigation never happens, this page takes over after the timeout.
+        if (temporaryLobbyHandoffPending()) return true;
         const current = new URLSearchParams(window.location.search).get("game");
         // No scan is running while native matchmaking is still joining the filler.
         // The actual background search below owns its HUD and visibility settings.
         const timedOut = Date.now() - recovery.updatedAt >= 15000;
         if ((!current || document.readyState !== "complete" || !isLobbyReady(isIngame)) && !timedOut) return true;
+        // Keep the pending search while the whitelist blocks it; consuming it now would drop it for good.
+        if (playerPolicyBlocks({ ...recovery.options, background: true, recovery: true })) return true;
+        if (temporaryLobbyNavigationAt === TEMPORARY_LOBBY_TAKEN_OVER) return true;
+        if (temporaryLobbyNavigationAt > 0) {
+            // This page's navigation never committed. Search here, but keep the recovery so a late navigation
+            // still resumes on the next page; a successful join replaces it anyway.
+            temporaryLobbyNavigationAt = TEMPORARY_LOBBY_TAKEN_OVER;
+            triggerMatchmaker("temporary-lobby-ready", { ...recovery.options, background: true, recovery: true });
+            return true;
+        }
         saveJoinRecovery({ ...recovery, temporary: false });
-        triggerMatchmaker("temporary-lobby-ready", { ...recovery.options, background: true });
+        triggerMatchmaker("temporary-lobby-ready", { ...recovery.options, background: true, recovery: true });
         return true;
     }
 
@@ -4656,6 +4718,8 @@ SOFTWARE.
     }
 
     function checkGameEndOrErrorState() {
+        // The page leaving for a temporary lobby must not react to its old lobby's messages.
+        if (temporaryLobbyHandoffPending()) return false;
         const screen = getVisibleConnectionError();
         if (screen) {
             if (handledConnectionScreen !== screen) {
@@ -4856,26 +4920,37 @@ SOFTWARE.
             && searchRunId === endSearchRunId
             && endScreen === getEl("endUI") && isElementActuallyVisible(endScreen)
             && !overlay.classList.contains("searching");
+        const stopReason = () => window.location.href !== sessionURL ? `url-changed:${window.location.search}`
+            : searchRunId !== endSearchRunId ? "another-search"
+                : endScreen !== getEl("endUI") || !isElementActuallyVisible(endScreen) ? "end-screen-closed"
+                    : overlay.classList.contains("searching") ? "already-searching" : "";
+        const stopped = step => emitDiagnostic("end-of-match-stopped", { step, reason: stopReason() });
+        let endMap = "";
+        try { endMap = String(window.getGameActivity?.()?.map || ""); } catch (_) { /* unavailable */ }
+        emitDiagnostic("end-of-match", { map: endMap, claimRewards: Boolean(STATE.autoClaimRewards),
+            doubleXP: Boolean(shouldClaimDoubleXP), autoSearch: Boolean(shouldSearch) });
         try {
             if (STATE.autoClaimRewards) {
                 await claimEndOfMatchRewards(isCurrent);
             }
-            if (!isCurrent()) return;
+            if (!isCurrent()) return stopped("after-rewards");
             if (shouldClaimDoubleXP && STATE.doubleXPAfterMatch) {
                 const doubleXPButton = await waitForVisibleEndScreenElement("doubleXPButton", DOUBLE_XP_BUTTON_WAIT_MS,
                     () => isCurrent() && STATE.doubleXPAfterMatch);
                 if (doubleXPButton) {
                     doubleXPButton.click();
+                    emitDiagnostic("double-xp-clicked", {});
                     await waitForMilliseconds(DOUBLE_XP_NICE_CLICK_DELAY_MS);
-                    if (!isCurrent()) return;
+                    if (!isCurrent()) return stopped("after-double-xp");
                     clickDoubleXPNiceConfirmation();
                     await waitForMilliseconds(DOUBLE_XP_POST_CLICK_WAIT_MS - DOUBLE_XP_NICE_CLICK_DELAY_MS);
                 }
             }
             if (shouldSearch && (STATE.autoSearchAfterMatch || getTargetHuntMaps().length) && isCurrent()) {
+                emitDiagnostic("auto-search-started", {});
                 clearJoinMarker();
                 triggerMatchmaker("match-ended", targetMaps.length ? { purpose: "fallback" } : null);
-            }
+            } else if (shouldSearch) stopped("before-search");
         } catch (error) {
             console.warn("Could not complete the end-of-match action.", error);
             if (shouldSearch && (STATE.autoSearchAfterMatch || getTargetHuntMaps().length) && isCurrent()) {
@@ -4913,6 +4988,16 @@ SOFTWARE.
         syncPlayerListButtons();
         syncTabPlayerBadges();
         if (document.body && gameStatusObserverTarget !== document.body) observeGameStatus();
+        // While handing off to a temporary lobby this page only waits; the next page owns recovery.
+        if (temporaryLobbyHandoffPending()) return;
+        // A handoff whose navigation never committed takes over even behind a persistent error screen.
+        if (temporaryLobbyNavigationAt && readJoinRecovery()?.temporary) {
+            if (getVisibleConnectionError()) {
+                // Retry through the connection-error handler, which (being disconnected) ignores the whitelist.
+                temporaryLobbyNavigationAt = 0;
+                handledConnectionScreen = null;
+            } else resumeAfterTemporaryLobby(false);
+        }
         if (checkGameEndOrErrorState()) return;
         const inst = getEl('instructions'), login = getEl('windowHolder'), mainUI = getEl('inGameUI');
         const isIngame = !!document.pointerLockElement || ((!inst || inst.offsetHeight === 0) && (!login || login.offsetHeight === 0) && (mainUI && mainUI.offsetHeight > 0));
@@ -4921,7 +5006,10 @@ SOFTWARE.
             if (mBtn) mBtn.style.display = isIngame ? "none" : "flex";
             lastIsIngame = isIngame;
         }
-        if (updatePlayerPolicy()) return;
+        const policyBlocked = updatePlayerPolicy();
+        // Returning from a temporary lobby is held only by a confirmed whitelisted player (see playerPolicyBlocks).
+        if (readJoinRecovery()?.temporary && !playerPolicy.held) resumeAfterTemporaryLobby(isIngame);
+        if (policyBlocked) return;
         // Read end-screen visibility once per tick; each read can force a style and layout pass.
         const endScreenVisible = isElementActuallyVisible(getEl("endUI"));
         checkAutoSearchAfterMatch(isIngame, endScreenVisible);
