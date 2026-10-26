@@ -2367,7 +2367,8 @@ SOFTWARE.
 
     function softFilterFailures(game, pings, filters) {
         const failures = [];
-        if (game.playerCount <= 0) failures.push("empty");
+        // Min Players 0 deliberately allows empty lobbies.
+        if (game.playerCount <= 0 && filters.minPlayers > 0) failures.push("empty");
         if (game.playerCount < filters.minPlayers) failures.push("minPlayers");
         if (game.playerCount > filters.maxPlayers) failures.push("maxPlayers");
         if (game.playerCount >= game.playerLimit) failures.push("full");
@@ -2382,7 +2383,7 @@ SOFTWARE.
 
     function preliminaryCandidateScore(game, filters) {
         let score = 0;
-        if (game.playerCount <= 0) score += 80;
+        if (game.playerCount <= 0 && filters.minPlayers > 0) score += 80;
         if (game.playerCount < filters.minPlayers) score += (filters.minPlayers - game.playerCount) * 12;
         if (game.playerCount > filters.maxPlayers) score += (game.playerCount - filters.maxPlayers) * 12;
         if (game.playerCount >= game.playerLimit) score += 100;
